@@ -1,10 +1,10 @@
 # Secure ReactJS-PHP API login user registration with the ability to upload a file using PHP system
-Secure login interface based on ReactJS and PHP API, designed with Material-UI. The PHP API server-side counts requests to the webserver - logs and blocks suspicious intruders.
+Secure login interface based on ReactJS and PHP API, designed with Material-UI. The PHP API server-side counts requests to the webserver - 
 
 
 
 ## Install
-- api: Copy the contents of the folder to the public folder of Apache2 (or another web server).
+- PHP API: Copy the contents of the folder to the public folder of Apache2 (or another web server xampp copy in htdocs folder).
 - Database: Run the SQL code in the databasefile/necsystem file & create your database with it.
 View 
 ```
