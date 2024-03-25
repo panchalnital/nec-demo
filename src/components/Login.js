@@ -15,8 +15,10 @@ function Login(){
     const [email,setEmail]=useState("");
     const [password,setPassword]=useState("");
     const [error, setError] = useState("");
+    const [action, setAction] = useState("login");
+    
     async function signIn(){
-        let item={email,password};
+        let item={email,password,action};
 
         const validateEmail = (email) => {
             return String(email)
@@ -40,7 +42,9 @@ function Login(){
             setError("Required for password field!");
             return false;
         }
-        let results=await fetch("http://127.0.0.1:8000/api/login",{
+        //let results=await fetch("http://127.0.0.1:8000/api/login",{
+       let results=await fetch("http://localhost/nce-demo/api/app/Controller/UserController.php",{
+            
             method:'POST',
             headers:{
                 "Content-Type":"application/json",
@@ -49,12 +53,12 @@ function Login(){
             body:JSON.stringify(item)
         });
         results=await results.json();
-        console.log("result",results);
-        if(!results.error){
-            localStorage.setItem("user-info",JSON.stringify(results));
+        //console.log("result",results.data[0]);
+        if(results.status=='success'){
+            localStorage.setItem("user-info",JSON.stringify(results.data[0]));
             navigate('/');
         }else{
-            setError(results.error);
+            setError(results.message);
         }
     
         
@@ -72,6 +76,7 @@ function Login(){
                 {error}
                 </Alert>
             )}
+                <input type="hidden" value={action} onChange={(e)=>setAction(e.target.value)}/><br/>
                 <input type="text" value={email} onChange={(e)=>setEmail(e.target.value)} className="form-control" placeholder="User Email" variant="filled"/><br/>
                 <input type="password" value={password} onChange={(e)=>setPassword(e.target.value)} className="form-control" placeholder="Password" variant="filled"/><br/>
             <button onClick={signIn} className="btn btn-primary">Sing In</button>

@@ -15,11 +15,11 @@ function Register(){
     const [email,setEmail]=useState("");
     const [password,setPassword]=useState("");
     const [error, setError] = useState("");
-    
+    const [action, setAction] = useState("register");
   
     async function signUp(){
         
-        let item={name,email,password};
+        let item={name,email,password,action};
         if(name==''){
             setError("Required for Name field!");
             return false;
@@ -47,7 +47,8 @@ function Register(){
         }
         //console.log(item);
         if(name!='' && email!='' && password!=''){
-            let results=await fetch("http://127.0.0.1:8000/api/register",{
+            //let results=await fetch("http://127.0.0.1:8000/api/register",{
+                let results=await fetch("http://localhost/nce-demo/api/app/Controller/UserController.php",{
                 method:'POST',
                 headers:{
                     "Content-Type":"application/json",
@@ -57,12 +58,14 @@ function Register(){
             });
             results=await results.json();
             console.log("result",results);
-            if(!results.error){
-                localStorage.setItem("user-info",JSON.stringify(results));
+
+            if(results.status=='success'){
+                localStorage.setItem("user-info",JSON.stringify(results.data[0]));
                 navigate('/add');
             }else{
-                setError(results.error);
+                setError(results.message);
             }
+
         }
         
         
@@ -77,6 +80,7 @@ function Register(){
                         {error}
                         </Alert>
             )}
+                <input type="hidden" value={action} onChange={(e)=>setAction(e.target.value)}/><br/>
                 <input type="text" value={name} onChange={(e)=>setName(e.target.value)} className="form-control" placeholder="User Name" required/><br/>
                 <input type="text" value={email} onChange={(e)=>setEmail(e.target.value)} className="form-control" placeholder="User Email" required /><br/>
                 <input type="password" value={password} onChange={(e)=>setPassword(e.target.value)} className="form-control" placeholder="Password"

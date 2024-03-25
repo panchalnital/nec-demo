@@ -12,7 +12,7 @@ function Header(){
         <div>
             <Navbar bg="dark" data-bs-theme="dark">
             {/* <Container> */}
-                <Navbar.Brand href="#home">NEC  </Navbar.Brand>
+                <Navbar.Brand href="#home">NEC Software Solutions  </Navbar.Brand>
                 <Nav className="me-auto nav_bar_wrapper">
                     {
                         localStorage.getItem('user-info')?
@@ -34,7 +34,6 @@ function Header(){
                 <Nav>
                     <NavDropdown title={user && user.name}>
                         <NavDropdown.Item onClick={logout}>Logout</NavDropdown.Item>
-                        <NavDropdown.Item>Profile</NavDropdown.Item>
                     </NavDropdown>
                 </Nav>
                 : null

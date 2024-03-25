@@ -5,36 +5,37 @@ import Header from './Header'
 import Alert from "@mui/material/Alert";
 function AddProduct(){
     const navigate = useNavigate()
-    const [name,setName]=useState("");
+    const user=JSON.parse(localStorage.getItem('user-info'));
+    const [action, setAction] = useState("saveFile");
     const [file,setFile]=useState("");
-    const [description,setDescription]=useState("");
-    const [price,setPrice]=useState("");
+    const [user_id,setUserid]=useState(user.id);
     const [error, setError] = useState("");
     async function SaveData(){
 
+
+        if(file==''){
+            setError("Required for Name field!");
+            return false;
+        }
         const formData=new FormData();
         formData.append("file",file);
-        formData.append("name",name);
-        formData.append("description",description);
-        formData.append("price",price);
-
-        let results=await fetch("http://127.0.0.1:8000/api/add",{
+        formData.append("action",action);
+        formData.append("user_id",user_id);
+        let results=await fetch("http://localhost/nce-demo/api/app/Controller/ProductsController.php",{
+        //let results=await fetch("http://127.0.0.1:8000/api/add",{
             method:'POST',
             body:formData
         });
         results=await results.json();
         console.log("result",results);
-        if(!results.error){
-            
+        
+        if(results.status=='success'){
+            //localStorage.setItem("user-info",JSON.stringify(results.data[0]));
             navigate('/');
         }else{
-            setError(results.error);
+            setError(results.message);
         }
-        
-        // results=await results.json();
-        // console.log("result",results);
-        // localStorage.setItem("user-info",JSON.stringify(results));
-        // navigate('/add');
+
         
     }
     return(
@@ -48,10 +49,10 @@ function AddProduct(){
                         {error}
                         </Alert>
                     )}
-                    <input type="text" onChange={(e)=>setName(e.target.value)} className="form-control" placeholder="Product Name" variant="filled" /><br/>
+                    <input type="hidden" onChange={(e)=>setAction(e.target.value)} className="form-control" placeholder="Product Name" variant="filled" /><br/>
+                    <input type="hidden" onChange={(e)=>setUserid(e.target.value)} className="form-control" placeholder="Product Name" variant="filled" /><br/>
                     <input type="file"  onChange={(e)=>setFile(e.target.files[0])} className="form-control" placeholder="Product File Upload Email" variant="filled" /><br/>
-                    <input type="text"  onChange={(e)=>setDescription(e.target.value)} className="form-control" placeholder="Producst Descrition" variant="filled" /><br/>
-                    <input type="text" onChange={(e)=>setPrice(e.target.value)} className="form-control" placeholder="Producst Price" variant="filled" /><br/>
+                   
                     <button onClick={SaveData} className="btn btn-primary">Save Product</button>
                 </div>
             </div>
