@@ -17,7 +17,7 @@ class UserController
                 return Common::createResponse('error', 'Missing required fields.', []);
             }
 			$user= Users::selectUser($data);
-            if(!empty($user)){
+            if(!empty($user) && password_verify($data['password'],$user[0]->password)){
                 return Common::createResponse('success', 'Logged in successfully', $user);
             }else{
                 return Common::createResponse('error', 'Incorrect login information.', []);

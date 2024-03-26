@@ -11,9 +11,10 @@ class Users
 		public static function selectUser($data)
 		{
 			$con = Connection::getConn();
+			$email=htmlspecialchars($data['email']);
 			$sql = "SELECT * FROM users WHERE email = :email";
 			$sql = $con->prepare($sql);
-			$sql->bindValue(':email', $data['email']);
+			$sql->bindValue(':email', $email);
 			$sql->execute();
 
 			$results = array();
@@ -28,11 +29,14 @@ class Users
 		{
 			
 			$con = Connection::getConn();
-            $passwordEncrpt=password_hash($data['password'],PASSWORD_DEFAULT);
+			$name=htmlspecialchars($data['name']);
+			$email=htmlspecialchars($data['email']);
+			$password=htmlspecialchars($data['password']);
+            $passwordEncrpt=password_hash($password,PASSWORD_DEFAULT);
 			$sql = "INSERT INTO users (name, email, password) VALUES (:name, :email, :password)";
 			$sql = $con->prepare($sql);
-			$sql->bindValue(':name', $data['name']);
-			$sql->bindValue(':email', $data['email']);
+			$sql->bindValue(':name', $name);
+			$sql->bindValue(':email', $email);
 			$sql->bindValue(':password', $passwordEncrpt);
 			$sql->execute();
 
